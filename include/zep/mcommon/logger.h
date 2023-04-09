@@ -13,12 +13,14 @@
 #include <thread>
 
 #ifdef WIN32
+    #ifndef __GNUC__ // Fix for MSYS 2 - See #110
 // A reference to the debug API on windows, to help the logger output in VC.  This is better
 // than out to the console sometimes, and as long as you are building on Windows, you are referencing the necessary
 // kernel32.dll....
 extern "C" {
 __declspec(dllimport) void __stdcall OutputDebugStringA(_In_opt_ const char* pszChar);
 }
+    #endif
 #endif
 
 #undef ERROR
@@ -64,7 +66,11 @@ public:
         {
             out << std::endl;
 #ifdef WIN32
+    #ifndef __GNUC__
             OutputDebugStringA(out.str().c_str());
+    #else
+            std::cout << out.str();
+    #endif
 #else
             std::cout << out.str();
 #endif

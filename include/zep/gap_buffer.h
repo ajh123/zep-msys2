@@ -33,6 +33,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include <string>
 #include <limits>
 
+#ifdef WIN32
+    #ifdef __GNUC__ // Fix for MSYS 2 - See #110
+    #include <stddef.h>
+    #include <limits.h>
+    #endif
+#endif
+
 #ifdef _DEBUG
 #define DEBUG_FILL_GAP for (auto* pCh = m_pGapStart; pCh < m_pGapEnd; pCh++) { *pCh = '@'; }
 #else
